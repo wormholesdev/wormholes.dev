@@ -8,44 +8,62 @@ description: Configuring wormholes as per you need.
 Wormholes is highly customizable with environment variables. The default values are there to make them work on local setup, for production these needs modifications.
 Following are the environment variables and there usage &mdash;
 
-### Configuring in distributed mode
+### Customizing ports
 
-| Name          | Purpose                                   |                                           Default Value |
-| ------------- | ----------------------------------------- | ------------------------------------------------------: |
-| `PORT`        | The port to run (`5000` when unified)     | `5000` (director), `5001` (generator), `5002` (creator) |
-| `BATCH_SIZE`  | Size of batch when ingesting events       |                                                 `10000` |
-| `STREAMS`     | Number of streams to ingest events        |                                                     `8` |
-| `ID_SIZE`     | Size of generated IDs                     |                                                     `7` |
-| `BLOOM_MAX`   | Limit of IDs to store                     |                                               `1000000` |
-| `BLOOM_ERROR` | Rate of false positives in bloom filter   |                                             `0.0000001` |
-| `BUCKET_SIZE` | Number of buckets to store IDs            |                                                     `8` |
-| `BUCKET_CAP`  | Number of IDs to store in a single bucket |                                               `100000 ` |
-| `GEN_ADDR`    | Address of generator instance             |                                        `localhost:5001` |
-| `TS_URI`      | URI for connecting to TimescaleDB         |  `postgres://postgres:postgres@localhost:5433/postgres` |
-| `PG_URI`      | URI for connecting to PostgreSQL          |  `postgres://postgres:postgres@localhost:5432/postgres` |
-| `PG_MAX_CONN` | Max connections for PostgreSQL            |                                                  `5000` |
-| `REDIS_URI`   | URI for connecting to Redis               |                       `redis://:redis@localhost:6379/0` |
+Following are the default ports for services &mdash;
+
+1. **director** - 5000
+2. **generator** - 5001
+3. **creator** - 5002
+
+These ports in each services can be changed with `PORT` environment variable.
+
+### Customizing database connections
+
+1. `TS_URI`- This controls the URI for connecting to TimescaleDB. The default is `postgres://postgres:postgres@localhost:5433/postgres`.
+2. `PG_URI` - This controls the URI for connecting to PostgreSQL. The default is `postgres://postgres:postgres@localhost:5432/postgres`.
+3. `PG_MAX_CONN` - This controls the max connections for PostgreSQL. The default is `5000`.
+4. `REDIS_URI` - THis controls the URI connecting to Redis and the default is `redis://:redis@localhost:6379/0`.
+
+### Links and events ingestion
+
+The link ingestion in **creator** and events ingestion in **director** can be configured using following environment variables.
+
+**For creator**
+
+1. `BATCH_SIZE` - This controls number of links ingested in a batch. The default value is 10000.
+
+**For director**
+
+1. `BATCH_SIZE` - This controls number of events ingested in a batch. The default value is 10000.
+2. `STREAMS` - I this controls the number of streams that process events. The default value is 8.
+
+### Customizing generator
+
+1. `ID_SIZE` - This controls the size of generated IDs. The default value is `7`.
+2. `BLOOM_MAX` - This configures bloomfilters based on approx number of IDs to store. The default value is `1000000`.
+3. `BLOOM_ERROR` - This controls the rate of false positives in bloom filter and the default is `0.0000001`.
+4. `BUCKET_SIZE` - Inside generator, IDs to be used are stored in buckets. This controls the number of buckets to store IDs `8`.
+5. `BUCKET_CAP` - This controls the number of IDs to store in a single bucket which is `100000 ` by default.
+
+### Connecting creator to generator
+
+The **creator** connects with generator over grpc and the url to generator instance can be controlled with `GEN_ADDR`. The default is `localhost:5001`.
 
 ---
 
-### Configuring in unified setup
+### Unified mode
 
-| Name          | Purpose                                   |             Default Value |
-| ------------- | ----------------------------------------- | ------------------------: |
-| `PORT`        | The port to run                           |                    `5000` |
-| `BATCH_SIZE`  | Size of batch when ingesting events       |                   `10000` |
-| `STREAMS`     | Number of streams to ingest events        |                       `8` |
-| `ID_SIZE`     | Size of generated IDs                     |                       `7` |
-| `BLOOM_MAX`   | Limit of IDs to store                     |                 `1000000` |
-| `BLOOM_ERROR` | Rate of false positives in bloom filter   |               `0.0000001` |
-| `BUCKET_SIZE` | Number of buckets to store IDs            |                       `8` |
-| `BUCKET_CAP`  | Number of IDs to store in a single bucket |                 `100000 ` |
-| `TS_URI`      | URI for connecting to TimescaleDB         | same as distributed setup |
-| `PG_URI`      | URI for connecting to PostgreSQL          | same as distributed setup |
-| `PG_MAX_CONN` | Max connections for PostgreSQL            |                    `5000` |
-| `REDIS_URI`   | URI for connecting to Redis               | same as distributed setup |
+Unified mode uses same environment variables as distributed one with following changes.
 
-## Configuring postgres
+1. The port defaults to `5000`
+2. The `GEN_ADDR` is not required as everything runs in a single service.
+
+---
+
+## Configuring Databases
+
+### Configuring postgres
 
 While default configuration works fine, below is an example postgres configuration at `deploy/conf/postgres.conf` tuned for load testing and generated with [pgtune](https://pgtune.leopard.in.ua/#/).
 
@@ -69,7 +87,7 @@ max_parallel_maintenance_workers = 2
 listen_addresses = '*'
 ```
 
-## Configuring redis
+### Configuring redis
 
 You'll need to setup redis as a lru cache. An exampl redis config at `deploy/conf/redis.conf` is provided below.
 
