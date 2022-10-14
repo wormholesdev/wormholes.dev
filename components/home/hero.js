@@ -19,7 +19,7 @@ export default function Hero() {
           Get Started
         </Link>
         <Link
-          href='https://github.com/womrholesdev/wormholes'
+          href='https://github.com/wormholesdev/wormholes'
           className={clsx([
             'transition-lift group mt-8 mr-2 inline-flex -translate-y-0 transform items-center rounded-md border border-transparent px-5 py-3 text-sm font-medium duration-300 ease-in-out hover:-translate-y-0.5',
             'text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-400',
