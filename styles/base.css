@@ -1,0 +1,12 @@
+html {
+  @apply antialiased;
+}
+
+html,
+body {
+  @apply h-full;
+}
+
+#__next {
+  height: 100%;
+}
