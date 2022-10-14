@@ -5,6 +5,9 @@ import { ClipboardFill, Code, Terminal } from 'react-bootstrap-icons'
 const langs = {
   js: 'Javascript',
   sh: 'Shell',
+  yaml: 'Compose',
+  properties: 'Properties',
+  lua: 'Lua',
 }
 
 const icons = {

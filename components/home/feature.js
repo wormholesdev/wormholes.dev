@@ -7,8 +7,15 @@ import {
   People,
 } from 'react-bootstrap-icons'
 
-function Feature({ name, tagline, desc, theme, reverse }) {
-  const [headClass, Icon] = theme
+const featureTypes = {
+  Fast: ['text-blue-500 dark:text-blue-400', LightningCharge],
+  Scalable: ['text-purple-500 dark:text-purple-400', GraphUpArrow],
+  CollisionFree: ['text-violet-500 dark:text-violet-400', Infinite],
+  Open: ['text-slate-500 dark:text-slate-400', People],
+}
+
+function Feature({ name, tagline, desc, type, reverse }) {
+  const [headClass, Icon] = featureTypes[type]
   return (
     <div className='my-16 max-w-7xl overflow-hidden rounded-lg lg:grid lg:grid-cols-2 lg:gap-4'>
       <div
@@ -59,10 +66,4 @@ function Feature({ name, tagline, desc, theme, reverse }) {
   )
 }
 
-Feature.Themes = {
-  Fast: ['text-blue-500 dark:text-blue-400', LightningCharge],
-  Scalable: ['text-purple-500 dark:text-purple-400', GraphUpArrow],
-  CollisionFree: ['text-violet-500 dark:text-violet-400', Infinite],
-  Open: ['text-slate-500 dark:text-slate-400', People],
-}
 export default Feature

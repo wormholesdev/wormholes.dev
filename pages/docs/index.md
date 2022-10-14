@@ -1,6 +1,5 @@
 ---
 title: Getting Started
-pageTitle: Wormholes - A scalable link shortener.
 description: Running and testing wormholes.
 ---
 
